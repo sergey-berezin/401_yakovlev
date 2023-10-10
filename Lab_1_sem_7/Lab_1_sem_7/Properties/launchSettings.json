@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Lab_1_sem_7": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\Yakov\\Downloads\\study_7_sem\\C#\\models\\hobbit.txt"
+    }
+  }
+}
