@@ -12,23 +12,22 @@ namespace MyApp
 {
     public class NeuralNetwork
     {
-        private string fileText;
         static Semaphore sessionRunLock = new Semaphore(1, 1);
-        private DownloadInterface downloadInterface;
+        private ModelDownload downloadInterface;
         private InferenceSession session;
         // Create Tokenizer and tokenize the sentence.
         BertUncasedLargeTokenizer tokenizer;
-        public NeuralNetwork(string fileText) 
+        public NeuralNetwork()
         {
-            this.fileText = fileText; 
-            downloadInterface = new DownloadInterface();
+            downloadInterface = new ModelDownload();
         }
-        public void OnnxModelInit() {
-            string modelPath = "bert-large-uncased-whole-word-masking-finetuned-squad.onnx";
-            downloadInterface.DownloadOnnxModel(modelPath);
+        public void OnnxModelInit()
+        {
+            string modelPath = "C:\\Users\\Yakov\\Downloads\\study_7_sem\\bert-large-uncased-whole-word-masking-finetuned-squa.onnx";
+            ModelDownload.DownloadOnnxModel(modelPath);
             session = new InferenceSession(modelPath);
         }
-        public async Task<String> AnswerQuestionAsync(string question, CancellationToken token)
+        public async Task<String> AnswerQuestionAsync(string fileText, string question, CancellationToken token)
         {
             return await Task.Factory.StartNew<string>(_ =>
             {
@@ -65,7 +64,7 @@ namespace MyApp
                     NamedOnnxValue.CreateFromTensor("segment_ids", token_type_ids) };
 
                 // Run session and send the input data in to get inference output. 
-                if (token.IsCancellationRequested)  
+                if (token.IsCancellationRequested)
                 {
                     throw new Exception("Operation had cancelled.");
                 }
@@ -74,7 +73,7 @@ namespace MyApp
                 try
                 {
                     output = session.Run(input);
-                } 
+                }
                 catch (Exception ex)
                 {
                     sessionRunLock.Release();

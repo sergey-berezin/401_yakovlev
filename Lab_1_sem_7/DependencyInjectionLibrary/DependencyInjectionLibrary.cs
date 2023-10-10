@@ -1,40 +1,36 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using static System.Net.WebRequestMethods;
 
 namespace MyApp
 {
-    public class IOInterface 
+    public interface IOInterface
     {
-        public string GetTxtFileText(string filepath) 
+        public string GetTxtFileText(string filepath);
+        public void Print(string data);
+        public string? GetInput();
+    }
+    public class IOConsoleImpl : IOInterface
+    {
+        public string GetTxtFileText(string filepath)
         {
-            string fullText = "", line;
-            StreamReader sr = new StreamReader(filepath);
-            //Read the first line of text
-            line = sr.ReadLine();
-            //Continue to read until you reach end of file
-            while (line != null)
-            {
-                fullText += line;
-                line = sr.ReadLine();
-            }
-            sr.Close();
-            return fullText;
+            return System.IO.File.ReadAllText(filepath);
         }
-        public void Print (string data)
+        public void Print(string data)
         {
             Console.WriteLine(data);
         }
-        public string? GetInput() 
+        public string? GetInput()
         {
             return Console.ReadLine();
         }
     }
-    public class DownloadInterface
+    public class ModelDownload
     {
-        public void DownloadOnnxModel(string filepath = "bert_model.onnx", string filelink = "https://storage.yandexcloud.net/dotnet4/bert-large-uncased-whole-word-masking-finetuned-squad.onnx") 
+        public static void DownloadOnnxModel(string filepath = "bert-large-uncased-whole-word-masking-finetuned-squa.onnx", string filelink = "https://storage.yandexcloud.net/dotnet4/bert-large-uncased-whole-word-masking-finetuned-squad.onnx")
         {
-            if (!File.Exists(filepath))
+            if (!System.IO.File.Exists(filepath))
             {
                 int try_counter = 0;
                 while (true)
