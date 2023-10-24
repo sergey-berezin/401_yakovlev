@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="WpfApp1.ClosableTabHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="120">
+    <Grid Width="95">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Name="HeadName" Text="Init tab" Grid.Column="0"/>
+        <Button Content="x" Name="button_close" HorizontalAlignment="Right" Grid.ColumnSpan="2" Margin="0,0,6,0"/>
+    </Grid>
+</UserControl>
