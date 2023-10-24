@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="WpfApp1.TabPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Button Name="ButtonOpen" Content="Open File" VerticalAlignment="Top" Width="100" Height="35" Click="ButtonClickOpenFile" Grid.Row="1"/>
+        <Button Name="ButtonAnswer" Content="Get answer" VerticalAlignment="Center" Width="100" Height="35" Click="ButtonClickGetAnswer" Grid.Row="1"/>
+        <Button Name="ButtonCancel" Content="Cancel" VerticalAlignment="Bottom" Width="100" Height="35" Click="ButtonClickCancel" Grid.Row="1"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400" Height="35" TextWrapping="Wrap" Text="Text:"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="570" Height="200" Name="TextBlockFile" TextWrapping="Wrap"/>
+        <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400" Height="35" Text="Answer:" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock Name="TextBlockAnswer" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="5700" Height="120" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Center" Width="150" Height="25" Text="Question:"/>
+        <TextBox Name="TextBoxQuestion" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="160" Height="200" TextWrapping="Wrap"/>
+    </Grid>
+</UserControl>
