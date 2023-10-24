@@ -38,7 +38,7 @@ namespace MyApp
         public async Task<String> AnswerQuestionAsync(string fileText, string question, CancellationToken token)
         {
             if (isDownloaded == false) {
-                throw new Exception("Model isn't downloaded.");
+                throw new NotSupportedException("Model isn't downloaded.");
             }
             return await Task.Factory.StartNew<string>(_ =>
             {
@@ -77,7 +77,7 @@ namespace MyApp
                 // Run session and send the input data in to get inference output. 
                 if (token.IsCancellationRequested)  
                 {
-                    throw new Exception("Operation had cancelled.");
+                    throw new ObjectDisposedException("cts");
                 }
                 IDisposableReadOnlyCollection<DisposableNamedOnnxValue> output;
                 sessionRunLock.WaitOne();
@@ -93,7 +93,7 @@ namespace MyApp
                 sessionRunLock.Release();
                 if (token.IsCancellationRequested)
                 {
-                    throw new Exception("Operation had cancelled.");
+                    throw new ObjectDisposedException("cts");
                 }
                 // Call ToList on the output.
                 // Get the First and Last item in the list.
@@ -116,7 +116,7 @@ namespace MyApp
                 // Print the result.
                 if (token.IsCancellationRequested)
                 {
-                    throw new Exception("Operation had cancelled.");
+                    throw new ObjectDisposedException("cts");
                 }
                 return String.Join(" ", predictedTokens);
             }, token, TaskCreationOptions.LongRunning);

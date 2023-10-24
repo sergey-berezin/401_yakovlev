@@ -37,16 +37,15 @@ namespace WpfApp1
         {
             TabItem newTab = new TabItem();
             var tabHead = new ClosableTabHeader($"Tab {tabNum}");
-            var cts = new CancellationTokenSource();
+            newTab.Header = tabHead;
+            newTab.Content = new TabPage(network);
             tabHead.button_close.Click +=
                 (sender, e) =>
                 {
-                    cts.Cancel();
+                    ((TabPage)newTab.Content).CancelOp();
                     TextAnswerTab.Items.Remove(newTab);
                 };
-            newTab.Header = tabHead;
             tabNum++;
-            newTab.Content = new TabPage(network, cts);
             TextAnswerTab.Items.Add(newTab);
         }
 

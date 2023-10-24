@@ -27,11 +27,11 @@ namespace WpfApp1
         CancellationTokenSource cts;
         NeuralNetwork network;
 
-        public TabPage(NeuralNetwork network, CancellationTokenSource cts)
+        public TabPage(NeuralNetwork network)
         { 
             InitializeComponent();
             this.network = network;
-            this.cts = cts;
+            cts = new CancellationTokenSource();
             ButtonAnswer.IsEnabled = false;
             ButtonCancel.IsEnabled = false;
         }
@@ -50,6 +50,7 @@ namespace WpfApp1
         }
         private async void ButtonClickGetAnswer(object sender, RoutedEventArgs e)
         {
+            cts = new CancellationTokenSource();
             ButtonAnswer.IsEnabled = false;
             ButtonCancel.IsEnabled = true;
             if (TextBoxQuestion.Text == null || TextBlockFile.Text == null || network.isDownloaded == false) 
@@ -62,12 +63,24 @@ namespace WpfApp1
                 string answer = await network.AnswerQuestionAsync(TextBlockFile.Text, TextBoxQuestion.Text, cts.Token);
                 TextBlockAnswer.Text = answer;
             }
+            catch (NotSupportedException ex) 
+            {
+                MessageBox.Show("The model was not loaded earlier.");
+            }
+            catch (ObjectDisposedException ex) 
+            {
+                MessageBox.Show("Operation canceled.");
+            }
             catch (Exception ex)
             {
                 MessageBox.Show("Somethink wrong.");
             }
             ButtonAnswer.IsEnabled = true;
             ButtonCancel.IsEnabled = false;
+        }
+        public void CancelOp()
+        {
+            cts.Cancel();
         }
         private void ButtonClickCancel(object sender, RoutedEventArgs e) 
         {

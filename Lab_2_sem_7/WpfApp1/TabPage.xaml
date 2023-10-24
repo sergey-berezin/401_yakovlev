@@ -21,7 +21,7 @@
         <TextBlock Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400" Height="35" TextWrapping="Wrap" Text="Text:"/>
         <TextBlock Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="570" Height="200" Name="TextBlockFile" TextWrapping="Wrap"/>
         <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400" Height="35" Text="Answer:" Grid.Column="1" Grid.Row="1"/>
-        <TextBlock Name="TextBlockAnswer" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="5700" Height="120" Grid.Column="1" Grid.Row="1"/>
+        <TextBlock Name="TextBlockAnswer" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="5700" Height="120" Grid.Column="1" Grid.Row="1"/>
         <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Center" Width="150" Height="25" Text="Question:"/>
         <TextBox Name="TextBoxQuestion" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="160" Height="200" TextWrapping="Wrap"/>
     </Grid>
