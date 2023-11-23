@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TargetFramework>net6.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BERTTokenizers" Version="1.2.0" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.15.1" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
+	<ProjectReference Include="..\DependencyInjectionLibrary\DependencyInjectionLibrary.csproj" />
+  </ItemGroup>
+</Project>
