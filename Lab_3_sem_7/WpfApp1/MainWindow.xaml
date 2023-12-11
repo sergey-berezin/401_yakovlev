@@ -18,6 +18,7 @@
             </TabItem.Header>
             <Grid>
                 <Button Name="button2" Content="Create new tab" Margin="10,10,513,20" Click="CreateTab" Height="167"/>
+                <Button Content="Drop database" Margin="359,115,183,124" Click="ButtonClickDropTables"/>
             </Grid>
         </TabItem>
     </TabControl>

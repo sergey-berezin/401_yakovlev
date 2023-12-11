@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DB.Migrations
 {
     [DbContext(typeof(TextsAnswers))]
-    [Migration("20231122193001_initial1")]
-    partial class initial1
+    [Migration("20231211191839_added ID to uniq rows")]
+    partial class addedIDtouniqrows
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,30 @@ namespace DB.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Authors");
+                    b.ToTable("IDtoText");
+                });
+
+            modelBuilder.Entity("DB.TextIDQuestion", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Answer")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Question")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TextNum")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("openCount")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("textIDQuestions");
                 });
 #pragma warning restore 612, 618
         }

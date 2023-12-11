@@ -42,12 +42,16 @@ namespace DB.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Answer")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Question")
-                        .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("TextNum")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("openCount")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 

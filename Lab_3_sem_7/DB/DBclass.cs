@@ -13,9 +13,11 @@ namespace DB
     }
     public class TextIDQuestion
     {
+        public int TextNum { get; set; }
         public int ID { get; set; }
-        public string Question { get; set; }
-        public string Answer { get; set; }
+        public string? Question { get; set; }
+        public string? Answer { get; set; }
+        public int openCount { get; set; }
     }
     public class TextsAnswers : DbContext
     {

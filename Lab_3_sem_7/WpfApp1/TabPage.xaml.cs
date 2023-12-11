@@ -28,6 +28,7 @@ namespace WpfApp1
         CancellationTokenSource cts;
         NeuralNetwork network;
         TextsAnswers db;
+        int QueryID;
 
         public TabPage(NeuralNetwork network, TextsAnswers db)
         { 
@@ -37,6 +38,19 @@ namespace WpfApp1
             cts = new CancellationTokenSource();
             ButtonAnswer.IsEnabled = false;
             ButtonCancel.IsEnabled = false;
+            this.QueryID = -1;
+        }
+        public void decreaseDBRecordCounter() 
+        {
+            UtilsForBD.decOpenCount(db, this.QueryID);
+        }
+        public void setTabPage(string text, string? question, string? answer, int QueryID)
+        {
+            TextBlockFile.Text = text;
+            TextBoxQuestion.Text = question;
+            TextBlockAnswer.Text = answer;
+            this.QueryID = QueryID;
+            ButtonAnswer.IsEnabled = true;
         }
         private void ButtonClickOpenFile(object sender, RoutedEventArgs e)
         {
@@ -49,6 +63,7 @@ namespace WpfApp1
                 fileContent = System.IO.File.ReadAllText(filePath);
                 TextBlockFile.Text = fileContent;
                 ButtonAnswer.IsEnabled = true;
+                QueryID = UtilsForBD.addQuestionAnswertoBD(db, fileContent, null, null);
             }
         }
         private async void ButtonClickGetAnswer(object sender, RoutedEventArgs e)
@@ -56,21 +71,28 @@ namespace WpfApp1
             cts = new CancellationTokenSource();
             ButtonAnswer.IsEnabled = false;
             ButtonCancel.IsEnabled = true;
-            if (TextBoxQuestion.Text == null || TextBlockFile.Text == null || network.isDownloaded == false) 
+            UtilsForBD.decOpenCount(db, QueryID);
+            if (TextBoxQuestion.Text == null || TextBlockFile.Text == null || network.isDownloaded == false ||
+                TextBlockFile.Text == "") 
             {
                 MessageBox.Show("Question or file is empty or network doesn't downloaded.");
+                ButtonAnswer.IsEnabled = true;
+                ButtonCancel.IsEnabled = false;
                 return;
             }
             try
             {
                 string? answer = UtilsForBD.getAnswerBD(db, TextBlockFile.Text, TextBoxQuestion.Text);
-                if (answer == null)
+                UtilsForBD.decOpenCount(db, QueryID);
+                if (answer != null)
                 {
-                    answer = await network.AnswerQuestionAsync(TextBlockFile.Text, TextBoxQuestion.Text, cts.Token);
-                    UtilsForBD.addQuestionAnswertoBD(db, TextBlockFile.Text, TextBoxQuestion.Text, answer);
+                    this.QueryID = UtilsForBD.addQuestionAnswertoBD(db, TextBlockFile.Text, TextBoxQuestion.Text, answer, QueryID);
+                    //MessageBox.Show($"Result for {TextBoxQuestion.Text} from BD.");
                 }
-                else {
-                    MessageBox.Show($"Result for {TextBoxQuestion.Text} from BD.");
+                else 
+                {    
+                    answer = await network.AnswerQuestionAsync(TextBlockFile.Text, TextBoxQuestion.Text, cts.Token);
+                    this.QueryID = UtilsForBD.addQuestionAnswertoBD(db, TextBlockFile.Text, TextBoxQuestion.Text, answer, QueryID);
                 }
                 TextBlockAnswer.Text = answer;
             }
@@ -82,11 +104,10 @@ namespace WpfApp1
             {
                 MessageBox.Show("Operation canceled.");
             }
-            /*
             catch (Exception ex)
             {
                 MessageBox.Show("Somethink wrong.");
-            }*/
+            }
             ButtonAnswer.IsEnabled = true;
             ButtonCancel.IsEnabled = false;
         }

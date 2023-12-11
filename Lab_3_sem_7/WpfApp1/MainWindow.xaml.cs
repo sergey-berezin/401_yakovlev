@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DB;
+using System.Xml.Serialization;
 
 namespace WpfApp1
 {
@@ -30,39 +31,42 @@ namespace WpfApp1
         {
             InitializeComponent();
             db = new TextsAnswers();
-            //db.Add(new TextID { ID = 5, Text = "some text 2" });
-            //db.SaveChanges();
-            /*
-            db.Add(new TextIDQuestion { ID = 5, Question = "sdfasdf 123", Answer = "some text 2" });
-            db.SaveChanges();
-            foreach (var temp in db.IDtoText) {
-                MessageBox.Show(temp.Text + " " + temp.ID);
-            }
-            foreach (var temp in db.textIDQuestions)
-            {
-                MessageBox.Show(temp.Question + " " + temp.ID + " " + temp.Answer);
-            }
-            */
             tabNum = 0;
             network = new NeuralNetwork();
             var cts = new CancellationTokenSource();
             _ = network.OnnxModelInit(cts.Token);
+            List<(string, string?, string?, int)> allTabsInfo = UtilsForBD.getAllRecordToRestore(db);
+            foreach ((string, string?, string?, int) cur_elem in allTabsInfo) 
+            {
+                createTab(cur_elem.Item1, cur_elem.Item2, cur_elem.Item3, cur_elem.Item4);
+            }
         }
 
         private void CreateTab(object sender, RoutedEventArgs e)
         {
+            createTab();
+        }
+        private void createTab(string? text = null, string? question = null, string? answer = null, int QueryNum = -1)
+        {
             TabItem newTab = new TabItem();
             var tabHead = new ClosableTabHeader($"Tab {tabNum}");
             newTab.Header = tabHead;
-            newTab.Content = new TabPage(network, db);
+            var curTabPage = new TabPage(network, db);
+            curTabPage.setTabPage(text, question, answer, QueryNum);
+            newTab.Content = curTabPage;
             tabHead.button_close.Click +=
                 (sender, e) =>
                 {
                     ((TabPage)newTab.Content).CancelOp();
                     TextAnswerTab.Items.Remove(newTab);
+                    curTabPage.decreaseDBRecordCounter();
                 };
             tabNum++;
             TextAnswerTab.Items.Add(newTab);
+        }
+        private void ButtonClickDropTables(object sender, RoutedEventArgs e)
+        {
+            UtilsForBD.DropDatabase(db);
         }
     }
 }
