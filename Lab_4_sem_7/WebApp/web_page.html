@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"  aria-label="a"/>-->
+    <title>Forth lab C#</title>
+</head>
+<body>
+    <h3>Web app (nn)</h3>
+    <input id="input_file" type="file" onchange="load_input_text()">
+    <br>
+    <textarea id="textInput" placeholder="Please, set file or write text" rows="10" cols="100"></textarea>
+    <br>
+    <button onclick="sendText(event)">Send text</button>
+    <br>
+    <input id="question" placeholder="Question">
+    <br>
+    <button onclick="getAnswer(event)">Start NN answering</button>
+    <div id="nn_in_process" style="display:none;">NN in process</div>
+    <div id="nn_output"></div>
+
+    <script type="text/javascript">
+        let textId = "";
+        function load_input_text() {
+            let reader = new FileReader()
+            reader.onload = function () {
+                let markup_elem = document.getElementById("textInput")
+                markup_elem.value = reader.result
+            }
+            let first_file = document.getElementById("input_file").files[0]
+            reader.readAsText(first_file)
+        }
+        async function sendText(event) {
+            const text = document.getElementById('textInput').value;
+            await fetch("https://localhost:5001/api/NN", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(text),
+            }).then(result => { return result.json(); }).then(result => {
+                textId = result;
+            })
+            return;
+        }
+        async function getAnswer(event) {
+            const question = document.getElementById('question').value;
+            let answer;
+            document.getElementById('nn_in_process').style.display = 'block';
+            document.getElementById('nn_output').innerText = ""
+            let responce = await fetch("https://localhost:5001/api/NN?textId=" + textId + "&question=" + question)
+            answer = await responce.text()
+            if (responce.ok) {
+                document.getElementById('nn_output').innerText = 'Answer: ' + answer;
+            }
+            else
+            {
+                alert("Bad question or text. Please, check for exist.")
+            }
+            document.getElementById('nn_in_process').style.display = 'none';
+        }</script>
+</body>
+</html>
